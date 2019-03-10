@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+project:
+  name: FileProcessorService
+  version: 0.1
+  description: CSV file processor
+info:
+  build:
+    artifact: ${project.artifactId}
+    name: ${project.name}
+    description: ${project.description}
+    version: ${project.version}
+
+logging:
+  file: fileprocessor.log
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+  
+
+# INTERNATIONALIZATION
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://localhost:3306/tulaa
+    username: root
+    password: r00t
+  thymeleaf:
+    cache: false
+
+
+
+
