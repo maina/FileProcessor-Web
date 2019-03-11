@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ import io.tulaa.fileprocessor.repositories.UserRepository;
 
 @Service
 public class CsvReader {
+	
+   Logger logger = LoggerFactory.getLogger(CsvReader.class);
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -26,7 +31,7 @@ public class CsvReader {
 			readFile(csvFile);
 			return true;
 		} catch (Exception e) {
-
+			logger.error("",e);
 		}
 		return false;
 	}
@@ -51,7 +56,7 @@ public class CsvReader {
 				List<User> users = new ArrayList<User>();
 				while ((line = br.readLine()) != null) {
 					if (counter == 0) {
-						//For the first line in the file, get the column headers and map the indexes
+						//For the first line in the file, get the column headers and map the column indexes
 						String[] header = line.split(cvsSplitBy);
 
 						for (int i = 0; i < header.length; i++) {
@@ -90,26 +95,24 @@ public class CsvReader {
 
 					}
 					counter++;
+					logger.debug("Processing row "+counter+"----->"+line);
 
 				}
 				if (!users.isEmpty()) {
 					userRepository.saveAll(users);
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("",e);
 			}
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
+			logger.error("",e);
+		}  finally {
 			if (br != null) {
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("",e);
 				}
 			}
 		}
